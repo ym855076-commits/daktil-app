@@ -400,6 +400,22 @@
             border: 3px solid var(--accent);
         }
 
+        /* Стиль для интерактивного увеличения QR-кода */
+        #qr-code-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 6px;
+            border: 1px solid var(--accent);
+            cursor: pointer;
+            transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease;
+        }
+
+        #qr-code-img.expanded {
+            width: 240px;
+            height: 240px;
+            transform: scale(1.05);
+        }
+
         .hidden { display: none !important; }
     </style>
 </head>
@@ -518,7 +534,7 @@
         </div>
     </div>
 
-    <!-- Модальное окно: Методическая справка с QR-кодом для коллег -->
+    <!-- Модальное окно: Методическая справка с увеличивающимся QR-кодом -->
     <div class="modal-overlay hidden" id="info-modal">
         <div class="modal-content">
             <h3 id="info-modal-title">📖 Usuly maglumat we maksat</h3>
@@ -526,10 +542,10 @@
             <p id="info-p2"><b>Pedagogik ähmiýeti:</b> Daktilologiýa çagalaryň sözlük zapasyny baýlaşdirmaga, el hereketleriniň utgaşyklygyny ösdürmäge we türkmen dili düşüngelerini giňeltmäge ýardam edýär.</p>
             <p id="info-p3"><b>Bellik:</b> Ähli maglumatlar we suratlar ýerli enjamda ýygnalyp, islendik wagt täzelemek ýa-da göçürmek mümkinçiligi bar.</p>
             
-            <!-- Встроенный QR-код для коллег -->
+            <!-- Интерактивный QR-код для коллег (увеличивается по клику) -->
             <div style="margin-top: 15px; padding: 12px; background: var(--ornament-bg); border-radius: 12px; border: 1px solid var(--border-color); text-align: center;">
-                <p style="font-size: 11px; font-weight: 700; color: var(--primary); margin-bottom: 6px;">Terbiýeçiler üçin QR-kod:</p>
-                <img src="./qrcode.png" alt="QR Code" style="width: 100px; height: 100px; border-radius: 6px; border: 1px solid var(--accent);">
+                <p style="font-size: 11px; font-weight: 700; color: var(--primary); margin-bottom: 6px;">Terbiýeçiler üçin QR-kod (Ulaltmak üçin basyň):</p>
+                <img src="./qrcode.png" alt="QR Code" id="qr-code-img">
                 <p style="font-size: 9px; opacity: 0.8; margin-top: 4px;">Kamerany yöneldip açyň</p>
             </div>
 
@@ -622,6 +638,12 @@
         const sectionQuiz = document.getElementById('section-quiz');
         const sectionClasses = document.getElementById('section-classes');
         const sectionDeafGame = document.getElementById('section-deafgame');
+
+        // Обработка клика для увеличения/уменьшения QR-кода
+        const qrCodeImg = document.getElementById('qr-code-img');
+        qrCodeImg.addEventListener('click', () => {
+            qrCodeImg.classList.toggle('expanded');
+        });
 
         function updateProgress() {
             const count = Object.keys(userPhotos).length;
