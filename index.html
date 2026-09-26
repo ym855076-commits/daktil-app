@@ -518,13 +518,21 @@
         </div>
     </div>
 
-    <!-- Модальное окно: Методическая справка -->
+    <!-- Модальное окно: Методическая справка с QR-кодом для коллег -->
     <div class="modal-overlay hidden" id="info-modal">
         <div class="modal-content">
             <h3 id="info-modal-title">📖 Usuly maglumat we maksat</h3>
             <p id="info-p1"><b>Maksatnama barada:</b> Bu interaktiw daktil elipbiýi ýörite mekdep-internatyň okuwçylary (ker we çala eşidýän çagalar) üçin döredildi.</p>
             <p id="info-p2"><b>Pedagogik ähmiýeti:</b> Daktilologiýa çagalaryň sözlük zapasyny baýlaşdirmaga, el hereketleriniň utgaşyklygyny ösdürmäge we türkmen dili düşüngelerini giňeltmäge ýardam edýär.</p>
             <p id="info-p3"><b>Bellik:</b> Ähli maglumatlar we suratlar ýerli enjamda ýygnalyp, islendik wagt täzelemek ýa-da göçürmek mümkinçiligi bar.</p>
+            
+            <!-- Встроенный QR-код для коллег -->
+            <div style="margin-top: 15px; padding: 12px; background: var(--ornament-bg); border-radius: 12px; border: 1px solid var(--border-color); text-align: center;">
+                <p style="font-size: 11px; font-weight: 700; color: var(--primary); margin-bottom: 6px;">Terbiýeçiler üçin QR-kod:</p>
+                <img src="./qrcode.png" alt="QR Code" style="width: 100px; height: 100px; border-radius: 6px; border: 1px solid var(--accent);">
+                <p style="font-size: 9px; opacity: 0.8; margin-top: 4px;">Kamerany yöneldip açyň</p>
+            </div>
+
             <button class="btn-main" id="close-info-btn" style="margin-top: 10px;">Düşnükli / Ýapmak</button>
         </div>
     </div>
