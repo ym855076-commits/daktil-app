@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="tk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Türkmen Daktil Alifbiýi Pro</title>
+    <!-- Подключаем библиотеку конфетти для анимации успехов -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #f7f4ed;
+            --card-bg: #ffffff;
+            --text-color: #2c221e;
+            --primary: #993d3d;
+            --accent: #d4af37;
+            --shadow: 0 10px 25px -5px rgba(153, 61, 61, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --border-color: #e6dfd5;
+            --ornament-bg: #fdfbf7;
+            --success-color: #2e7d32;
+        }
+
+        body.dark-theme {
+            --bg-color: #1a1412;
+            --card-bg: #2a211e;
+            --text-color: #f7f4ed;
+            --primary: #d4af37;
+            --accent: #993d3d;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+            --border-color: #3d312c;
+            --ornament-bg: #221a17;
+            --success-color: #388e3c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border: 2px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
+        }
+
+        .school-name {
+            font-size: 10px;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        /* Индикатор прогресса заполнения база */
+        .progress-indicator {
+            font-size: 10px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        h1 {
+            font-size: 17px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .author-info {
+            font-size: 11px;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .controls-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            gap: 8px;
+        }
+
+        .btn-small {
+            background: var(--ornament-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .search-input {
+            flex: 1;
+            background: var(--ornament-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 5px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            gap: 4px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 8px 4px;
+            border: none;
+            background: transparent;
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 11px;
+            border-radius: 8px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .letter-display {
+            font-size: 64px;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .photo-container {
+            width: 200px;
+            height: 200px;
+            border-radius: 16px;
+            border: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle, var(--ornament-bg) 0%, var(--border-color) 100%);
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            font-size: 13px;
+            color: var(--text-color);
+            opacity: 0.7;
+            padding: 10px;
+            font-weight: 500;
+        }
+
+        .photo-actions {
+            display: flex;
+            gap: 8px;
+            width: 200px;
+            margin-bottom: 15px;
+        }
+
+        .btn-photo-action {
+            flex: 1;
+            background: var(--ornament-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .word-example {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--ornament-bg);
+            padding: 8px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .btn-main {
+            flex: 1;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .grid-view {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            max-height: 360px;
+            overflow-y: auto;
+            width: 100%;
+            padding: 5px;
+        }
+
+        .grid-item {
+            background: var(--ornament-bg);
+            border: 1px solid var(--border-color);
+            padding: 12px 5px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+        }
+
+        .grid-item.has-photo::after {
+            content: "✓";
+            position: absolute;
+            top: 2px; right: 4px;
+            font-size: 10px;
+            color: var(--success-color);
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .quiz-btn {
+            background: var(--ornament-bg);
+            border: 2px solid var(--border-color);
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .quiz-btn.correct { background: var(--success-color) !important; color: white !important; }
+        .quiz-btn.wrong { background: #c62828 !important; color: white !important; }
+
+        .class-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+            width: 100%;
+            padding: 5px;
+        }
+
+        .class-card-btn {
+            background: var(--ornament-bg);
+            border: 2px solid var(--border-color);
+            padding: 12px 6px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* Модальные окна */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+            border: 2px solid var(--accent);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h3 {
+            color: var(--primary);
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .modal-content p {
+            font-size: 13px;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+
+        .modal-camera video {
+            width: 100%;
+            max-width: 400px;
+            height: 380px;
+            object-fit: cover;
+            border-radius: 16px;
+            border: 3px solid var(--accent);
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="school-name">Lebap welaýatynyň 5-nji ker, çala eşidýän we soň ker bolan çagalar üçin ýörite umumybilim berýän mekdep-internaty</div>
+            <div class="progress-indicator" id="progress-indicator">Ýüklenen suratlar: 0 / 30</div>
+            <h1 id="main-title">Türkmen Daktil Alifbiýi</h1>
+            <div class="author-info" id="author-text">Autor: Ý. Mürzaýew | Terbiýeçi</div>
+            
+            <div class="controls-top">
+                <button class="btn-small" id="info-btn">📖 Barada</button>
+                <button class="btn-small" id="lang-toggle-btn">РУС / TKM</button>
+                <button class="btn-small" id="theme-btn">☀️ / 🌙</button>
+            </div>
+
+            <div class="search-box">
+                <input type="text" id="search-input" class="search-input" placeholder="Harp gözle (Mysal: A, B, Ç)...">
+            </div>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" id="tab-learn">Okuw</button>
+            <button class="tab-btn" id="tab-grid">Harplar</button>
+            <button class="tab-btn" id="tab-quiz">Wiktorina</button>
+            <button class="tab-btn" id="tab-classes">1-12 Klass</button>
+            <button class="tab-btn" id="tab-deafgame" style="color: var(--accent);">🎮 Oýun</button>
+        </div>
+
+        <!-- Обучение -->
+        <div id="section-learn" class="card">
+            <div class="letter-display" id="current-letter">A</div>
+            
+            <div class="photo-container" id="photo-box">
+                <div class="photo-placeholder" id="photo-placeholder-text">Surat ýok</div>
+                <img id="letter-img" class="hidden" src="" alt="Daktil surat">
+            </div>
+            
+            <div style="display: flex; gap: 8px; width: 200px; margin-bottom: 8px;">
+                <button class="btn-photo-action" id="open-cam-btn" style="background: var(--primary); color: white; border: none; font-weight: 700;">📸 Kamera</button>
+                <button class="btn-photo-action" id="open-file-btn" style="background: var(--accent); color: white; border: none; font-weight: 700;">📁 Galereýa</button>
+            </div>
+            <input type="file" id="file-input" accept="image/*" class="hidden">
+
+            <div class="photo-actions" id="photo-actions-box">
+                <button class="btn-photo-action" id="rotate-btn">🔄 Aýlamak</button>
+                <button class="btn-photo-action" id="delete-btn" style="color: #c62828;">❌ Pozmak</button>
+            </div>
+
+            <div class="word-example">
+                <span id="word-emoji">🌾</span>
+                <span id="word-text">Mysal: Atyz</span>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn-main" id="prev-btn">← Yza</button>
+                <button class="btn-main" id="next-btn">Öňe →</button>
+            </div>
+        </div>
+
+        <!-- Сетка и резервное копирование -->
+        <div id="section-grid" class="card hidden">
+            <div style="width: 100%; display: flex; justify-content: space-between; margin-bottom: 10px; gap: 8px;">
+                <button class="btn-small" id="export-btn" style="background: var(--primary); color:white; flex:1;">💾 Ätiýaçlyk göçürmek</button>
+                <button class="btn-small" id="import-btn" style="background: var(--accent); color:white; flex:1;">📂 Ýüklemek (Bekap)</button>
+                <input type="file" id="import-file-input" accept=".json" class="hidden">
+            </div>
+            <div class="grid-view" id="letters-grid"></div>
+        </div>
+
+        <!-- Викторина -->
+        <div id="section-quiz" class="card hidden">
+            <div class="quiz-container" style="width: 100%;">
+                <div id="quiz-score" style="font-size: 14px; font-weight: 600; margin-bottom: 10px;">Ball: 0</div>
+                <div class="photo-container" style="width: 160px; height: 160px; margin: 0 auto; pointer-events: none;">
+                    <img id="quiz-img" src="" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div style="font-size: 15px; margin-top: 10px; font-weight: 600;" id="quiz-question-text">Bu haýsy harp?</div>
+                <div class="quiz-options" id="quiz-options-box"></div>
+            </div>
+        </div>
+
+        <!-- Классы 1-12 -->
+        <div id="section-classes" class="card hidden">
+            <div id="class-menu-view" style="width: 100%;">
+                <h3 id="classes-title" style="margin-bottom: 12px; font-size: 15px; color: var(--primary);">1 - 12 Klasslar boýunça barlag oýunlary</h3>
+                <div class="class-grid" id="class-grid-box"></div>
+            </div>
+            <div id="class-game-view" class="hidden" style="width: 100%;">
+                <button class="btn-small" id="back-to-classes" style="margin-bottom: 12px;">← Klasslara dolanmak</button>
+                <h3 id="active-class-title" style="margin-bottom: 10px; font-size: 16px; color: var(--accent);"></h3>
+                <div style="font-size: 14px; font-weight: 600; margin-bottom: 8px;" id="class-game-score">Ball: 0</div>
+                <div class="photo-container" style="width: 160px; height: 160px; margin: 0 auto; pointer-events: none;">
+                    <img id="class-game-img" src="" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div style="font-size: 15px; margin-top: 10px; font-weight: 600;" id="class-game-question"></div>
+                <div class="quiz-options" id="class-game-options"></div>
+            </div>
+        </div>
+
+        <!-- Игра для глухонемых детей -->
+        <div id="section-deafgame" class="card hidden">
+            <div class="quiz-container" style="width: 100%;">
+                <h3 style="font-size: 15px; color: var(--primary); margin-bottom: 4px;" id="deaf-game-title">Sözi Daktil Bilen Tap</h3>
+                <div style="font-size: 11px; opacity: 0.8; margin-bottom: 12px;" id="deaf-game-subtitle">Ker we çala eşidýän çagalar üçin oýun</div>
+                <div id="deaf-game-score" style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">Ball: 0</div>
+                
+                <div style="font-size: 36px; margin-bottom: 4px;" id="deaf-emoji">🍎</div>
+                <div style="font-size: 16px; font-weight: 800; color: var(--accent); margin-bottom: 12px;" id="deaf-word">Söz: Alma</div>
+
+                <div style="font-size: 13px; font-weight: 600; margin-bottom: 8px;" id="deaf-prompt">Şu sözüň daktil suraty haýsy?</div>
+                <div class="quiz-options" id="deaf-options-box"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно: Методическая справка (О проекте) -->
+    <div class="modal-overlay hidden" id="info-modal">
+        <div class="modal-content">
+            <h3 id="info-modal-title">📖 Usuly maglumat we maksat</h3>
+            <p id="info-p1"><b>Maksatnama barada:</b> Bu interaktiw daktil elipbiýi ýörite mekdep-internatyň okuwçylary (ker we çala eşidýän çagalar) üçin döredildi.</p>
+            <p id="info-p2"><b>Pedagogik ähmiýeti:</b> Daktilologiýa çagalaryň sözlük zapasyny baýlaşdirmaga, el hereketleriniň utgaşyklygyny ösdürmäge we türkmen dili düşüngelerini giňeltmäge ýardam edýär.</p>
+            <p id="info-p3"><b>Bellik:</b> Ähli maglumatlar we suratlar ýerli enjamda ýygnalyp, islendik wagt täzelemek ýa-da göçürmek mümkinçiligi bar.</p>
+            <button class="btn-main" id="close-info-btn" style="margin-top: 10px;">Düşnükli / Ýapmak</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно веб-камеры -->
+    <div class="modal-overlay modal-camera hidden" id="camera-modal">
+        <video id="cam-video" autoplay playsinline muted></video>
+        <canvas id="cam-canvas" class="hidden"></canvas>
+        <div style="display: flex; gap: 10px; width: 100%; max-width: 400px;">
+            <button class="btn-main" id="take-snapshot-btn" style="background: var(--success-color);">📸 Surata düşürmek</button>
+            <button class="btn-main" id="close-cam-btn" style="background: #c62828;">Ýatyrmak</button>
+        </div>
+    </div>
+
+    <script>
+        const alphabet = [
+            { letter: "A", word: "Atyz", emoji: "🌾" },
+            { letter: "B", word: "Balyk", emoji: "🐟" },
+            { letter: "Ç", word: "Çäýnek", emoji: "🫖" },
+            { letter: "D", word: "Daragt", emoji: "🌳" },
+            { letter: "E", word: "El", emoji: "✋" },
+            { letter: "Ä", word: "Älem", emoji: "🌈" },
+            { letter: "F", word: "Fener", emoji: "🔦" },
+            { letter: "G", word: "Gämi", emoji: "🚢" },
+            { letter: "H", word: "Hatyda", emoji: "📖" },
+            { letter: "I", word: "Içýän", emoji: "🥛" },
+            { letter: "Ý", word: "Ýyldyz", emoji: "⭐" },
+            { letter: "J", word: "Jüýje", emoji: "🐥" },
+            { letter: "Ž", word: "Žurnal", emoji: "📰" },
+            { letter: "K", word: "Kitap", emoji: "📚" },
+            { letter: "L", word: "Lampa", emoji: "💡" },
+            { letter: "M", word: "Mellek", emoji: "🏡" },
+            { letter: "N", word: "Nahar", emoji: "🍲" },
+            { letter: "Ň", word: "Ňň", emoji: "💬" },
+            { letter: "O", word: "Ojak", emoji: "🔥" },
+            { letter: "Ö", word: "Öý", emoji: "🏠" },
+            { letter: "P", word: "Pomidor", emoji: "🍅" },
+            { letter: "R", word: "Radio", emoji: "📻" },
+            { letter: "S", word: "Suw", emoji: "💧" },
+            { letter: "Ş", word: "Şar", emoji: "🎈" },
+            { letter: "T", word: "Tarla", emoji: "🌾" },
+            { letter: "U", word: "Uçar", emoji: "✈️" },
+            { letter: "Ü", word: "Üzüm", emoji: "🍇" },
+            { letter: "W", word: "Wagon", emoji: "🚃" },
+            { letter: "Y", word: "Yşyk", emoji: "💡" },
+            { letter: "Z", word: "Zitun", emoji: "🫒" }
+        ];
+
+        let currentIndex = 0;
+        let currentLang = 'tk';
+        let userPhotos = JSON.parse(localStorage.getItem('daktil_photos') || '{}');
+        let photoRotations = JSON.parse(localStorage.getItem('daktil_rotations') || '{}');
+        let quizScore = 0, classGameScore = 0, deafScore = 0;
+        let correctAnswer = '', isAnswerLocked = false, selectedClassIndex = 1;
+        let mediaStream = null;
+
+        if (localStorage.getItem('daktil_theme') === 'dark') document.body.classList.add('dark-theme');
+
+        const currentLetterEl = document.getElementById('current-letter');
+        const wordText = document.getElementById('word-text');
+        const wordEmoji = document.getElementById('word-emoji');
+        const letterImg = document.getElementById('letter-img');
+        const photoPlaceholderText = document.getElementById('photo-placeholder-text');
+        const photoActionsBox = document.getElementById('photo-actions-box');
+        const progressIndicator = document.getElementById('progress-indicator');
+        
+        const openCamBtn = document.getElementById('open-cam-btn');
+        const openFileBtn = document.getElementById('open-file-btn');
+        const fileInput = document.getElementById('file-input');
+        const cameraModal = document.getElementById('camera-modal');
+        const camVideo = document.getElementById('cam-video');
+        const camCanvas = document.getElementById('cam-canvas');
+        const searchInput = document.getElementById('search-input');
+
+        // Элементы модалки "О программе"
+        const infoBtn = document.getElementById('info-btn');
+        const infoModal = document.getElementById('info-modal');
+        const closeInfoBtn = document.getElementById('close-info-btn');
+
+        const tabLearn = document.getElementById('tab-learn');
+        const tabGrid = document.getElementById('tab-grid');
+        const tabQuiz = document.getElementById('tab-quiz');
+        const tabClasses = document.getElementById('tab-classes');
+        const tabDeafGame = document.getElementById('tab-deafgame');
+
+        const sectionLearn = document.getElementById('section-learn');
+        const sectionGrid = document.getElementById('section-grid');
+        const sectionQuiz = document.getElementById('section-quiz');
+        const sectionClasses = document.getElementById('section-classes');
+        const sectionDeafGame = document.getElementById('section-deafgame');
+
+        function updateProgress() {
+            const count = Object.keys(userPhotos).length;
+            progressIndicator.textContent = currentLang === 'tk' 
+                ? `Ýüklenen suratlar: ${count} / ${alphabet.length}` 
+                : `Загружено фото: ${count} из ${alphabet.length}`;
+        }
+
+        function triggerConfetti() {
+            confetti({
+                particleCount: 70,
+                spread: 60,
+                origin: { y: 0.6 }
+            });
+        }
+
+        function updateDisplay() {
+            const item = alphabet[currentIndex];
+            currentLetterEl.textContent = item.letter;
+            wordEmoji.textContent = item.emoji;
+            wordText.textContent = (currentLang === 'tk' ? "Mysal: " : "Пример: ") + item.word;
+            updateProgress();
+
+            const letter = item.letter;
+            if (userPhotos[letter]) {
+                letterImg.src = userPhotos[letter];
+                letterImg.style.transform = `rotate(${photoRotations[letter] || 0}deg)`;
+                letterImg.classList.remove('hidden');
+                photoPlaceholderText.classList.add('hidden');
+                photoActionsBox.style.display = 'flex';
+            } else {
+                letterImg.src = '';
+                letterImg.classList.add('hidden');
+                photoPlaceholderText.classList.remove('hidden');
+                photoActionsBox.style.display = 'none';
+            }
+        }
+
+        // Управление модалкой информации
+        infoBtn.addEventListener('click', () => infoModal.classList.remove('hidden'));
+        closeInfoBtn.addEventListener('click', () => infoModal.classList.add('hidden'));
+
+        // Экспорт / Импорт данных (Бекап)
+        document.getElementById('export-btn').addEventListener('click', () => {
+            const backupData = { photos: userPhotos, rotations: photoRotations };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", "daktil_backup.json");
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+        });
+
+        document.getElementById('import-btn').addEventListener('click', () => document.getElementById('import-file-input').click());
+        document.getElementById('import-file-input').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const parsed = JSON.parse(event.target.result);
+                    if(parsed.photos) {
+                        userPhotos = parsed.photos;
+                        photoRotations = parsed.rotations || {};
+                        localStorage.setItem('daktil_photos', JSON.stringify(userPhotos));
+                        localStorage.setItem('daktil_rotations', JSON.stringify(photoRotations));
+                        updateDisplay();
+                        alert(currentLang === 'tk' ? "Maglumatlar üstünlükli ýüklendi!" : "Данные успешно загружены!");
+                    }
+                } catch(err) {
+                    alert(currentLang === 'tk' ? "Faýl ýalňyş!" : "Ошибка чтения файла!");
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim().toUpperCase();
+            if (!query) return;
+            const foundIndex = alphabet.findIndex(item => item.letter.toUpperCase() === query || item.word.toUpperCase().includes(query));
+            if (foundIndex !== -1) {
+                currentIndex = foundIndex;
+                switchTab('learn');
+                updateDisplay();
+            }
+        });
+
+        openCamBtn.addEventListener('click', async () => {
+            try {
+                mediaStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }, 
+                    audio: false 
+                });
+                camVideo.srcObject = mediaStream;
+                cameraModal.classList.remove('hidden');
+            } catch (err) {
+                alert(currentLang === 'tk' 
+                    ? "Kamerany açyp bolmady! Brauzere kamerany ulanmaga rugsat beriň ýa-da 'Galereýa' düwmmesini ulanyň." 
+                    : "Не удалось запустить камеру! Проверьте разрешения браузера или используйте кнопку 'Галерея'.");
+            }
+        });
+
+        document.getElementById('close-cam-btn').addEventListener('click', () => {
+            if (mediaStream) mediaStream.getTracks().forEach(t => t.stop());
+            cameraModal.classList.add('hidden');
+        });
+
+        document.getElementById('take-snapshot-btn').addEventListener('click', () => {
+            const w = camVideo.videoWidth || 640;
+            const h = camVideo.videoHeight || 640;
+            camCanvas.width = w;
+            camCanvas.height = h;
+            camCanvas.getContext('2d').drawImage(camVideo, 0, 0, w, h);
+
+            const dataUrl = camCanvas.toDataURL('image/jpeg', 0.9);
+            const letter = alphabet[currentIndex].letter;
+            userPhotos[letter] = dataUrl;
+            photoRotations[letter] = 0;
+            localStorage.setItem('daktil_photos', JSON.stringify(userPhotos));
+
+            if (mediaStream) mediaStream.getTracks().forEach(t => t.stop());
+            cameraModal.classList.add('hidden');
+            updateDisplay();
+        });
+
+        openFileBtn.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const letter = alphabet[currentIndex].letter;
+                    userPhotos[letter] = event.target.result;
+                    photoRotations[letter] = 0;
+                    localStorage.setItem('daktil_photos', JSON.stringify(userPhotos));
+                    updateDisplay();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('rotate-btn').addEventListener('click', () => {
+            const letter = alphabet[currentIndex].letter;
+            if (userPhotos[letter]) {
+                photoRotations[letter] = ((photoRotations[letter] || 0) + 90) % 360;
+                localStorage.setItem('daktil_rotations', JSON.stringify(photoRotations));
+                letterImg.style.transform = `rotate(${photoRotations[letter]}deg)`;
+            }
+        });
+
+        document.getElementById('delete-btn').addEventListener('click', () => {
+            const letter = alphabet[currentIndex].letter;
+            delete userPhotos[letter];
+            delete photoRotations[letter];
+            localStorage.setItem('daktil_photos', JSON.stringify(userPhotos));
+            updateDisplay();
+        });
+
+        document.getElementById('prev-btn').addEventListener('click', () => { currentIndex = (currentIndex - 1 + alphabet.length) % alphabet.length; updateDisplay(); });
+        document.getElementById('next-btn').addEventListener('click', () => { currentIndex = (currentIndex + 1) % alphabet.length; updateDisplay(); });
+
+        function switchTab(t) {
+            [sectionLearn, sectionGrid, sectionQuiz, sectionClasses, sectionDeafGame].forEach(s => s.classList.add('hidden'));
+            [tabLearn, tabGrid, tabQuiz, tabClasses, tabDeafGame].forEach(b => b.classList.remove('active'));
+
+            if(t==='learn') { sectionLearn.classList.remove('hidden'); tabLearn.classList.add('active'); }
+            else if(t==='grid') { sectionGrid.classList.remove('hidden'); tabGrid.classList.add('active'); buildGrid(); }
+            else if(t==='quiz') { sectionQuiz.classList.remove('hidden'); tabQuiz.classList.add('active'); nextQuiz(); }
+            else if(t==='classes') { sectionClasses.classList.remove('hidden'); tabClasses.classList.add('active'); showClassMenu(); }
+            else if(t==='deafgame') { sectionDeafGame.classList.remove('hidden'); tabDeafGame.classList.add('active'); nextDeafQuestion(); }
+        }
+
+        tabLearn.addEventListener('click', () => switchTab('learn'));
+        tabGrid.addEventListener('click', () => switchTab('grid'));
+        tabQuiz.addEventListener('click', () => switchTab('quiz'));
+        tabClasses.addEventListener('click', () => switchTab('classes'));
+        tabDeafGame.addEventListener('click', () => switchTab('deafgame'));
+
+        function buildGrid() {
+            const grid = document.getElementById('letters-grid');
+            grid.innerHTML = '';
+            alphabet.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = 'grid-item' + (userPhotos[item.letter] ? ' has-photo' : '');
+                div.textContent = item.letter;
+                div.addEventListener('click', () => { currentIndex = idx; switchTab('learn'); });
+                grid.appendChild(div);
+            });
+        }
+
+        function showClassMenu() {
+            document.getElementById('class-menu-view').classList.remove('hidden');
+            document.getElementById('class-game-view').classList.add('hidden');
+            const box = document.getElementById('class-grid-box');
+            box.innerHTML = '';
+            for(let i=1; i<=12; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'class-card-btn';
+                btn.textContent = (currentLang === 'tk' ? `${i} -nji klass` : `${i}-й класс`);
+                btn.addEventListener('click', () => { selectedClassIndex = i; startClassGame(i); });
+                box.appendChild(btn);
+            }
+        }
+        document.getElementById('back-to-classes').addEventListener('click', showClassMenu);
+
+        function startClassGame(cls) {
+            document.getElementById('class-menu-view').classList.add('hidden');
+            document.getElementById('class-game-view').classList.remove('hidden');
+            classGameScore = 0;
+            document.getElementById('active-class-title').textContent = (currentLang === 'tk' ? `${cls}-nji klass oýuny` : `Игра: ${cls}-й класс`);
+            nextClassQuestion();
+        }
+
+        function nextClassQuestion() {
+            isAnswerLocked = false;
+            const img = document.getElementById('class-game-img');
+            const opts = document.getElementById('class-game-options');
+            document.getElementById('class-game-score').textContent = (currentLang === 'tk' ? "Ball: " : "Баллы: ") + classGameScore;
+            opts.innerHTML = '';
+
+            const available = alphabet.filter(i => userPhotos[i.letter]);
+            if (available.length < 2) {
+                opts.innerHTML = `<div style="grid-column:span 2; font-size:12px; opacity:0.7;">${currentLang === 'tk' ? "Azyndan 2 surat ýükläň!" : "Загрузите хотя бы 2 фото!"}</div>`;
+                return;
+            }
+            const target = available[Math.floor(Math.random() * available.length)];
+            correctAnswer = target.letter;
+            img.src = userPhotos[correctAnswer];
+            document.getElementById('class-game-question').textContent = (currentLang === 'tk' ? `Bu haýsy harp?` : `Какая это буква?`);
+
+            let choices = [correctAnswer];
+            while(choices.length < 4 && choices.length < available.length) {
+                let r = available[Math.floor(Math.random() * available.length)].letter;
+                if(!choices.includes(r)) choices.push(r);
+            }
+            choices.sort(() => Math.random() - 0.5);
+
+            choices.forEach(ch => {
+                const b = document.createElement('button');
+                b.className = 'quiz-btn';
+                b.textContent = ch;
+                b.addEventListener('click', () => {
+                    if(isAnswerLocked) return;
+                    isAnswerLocked = true;
+                    if(ch === correctAnswer) { 
+                        b.classList.add('correct'); 
+                        classGameScore += (selectedClassIndex * 2); 
+                        triggerConfetti();
+                    }
+                    else { b.classList.add('wrong'); opts.querySelectorAll('.quiz-btn').forEach(btn => { if(btn.textContent === correctAnswer) btn.classList.add('correct'); }); }
+                    setTimeout(nextClassQuestion, 1200);
+                });
+                opts.appendChild(b);
+            });
+        }
+
+        function nextDeafQuestion() {
+            isAnswerLocked = false;
+            const opts = document.getElementById('deaf-options-box');
+            document.getElementById('deaf-game-score').textContent = (currentLang === 'tk' ? "Ball: " : "Баллы: ") + deafScore;
+            opts.innerHTML = '';
+
+            const available = alphabet.filter(i => userPhotos[i.letter]);
+            if (available.length < 2) {
+                opts.innerHTML = `<div style="grid-column:span 2; font-size:12px; opacity:0.7;">${currentLang === 'tk' ? "Harplara surat ýükläň!" : "Загрузите фото для игры!"}</div>`;
+                return;
+            }
+            const target = available[Math.floor(Math.random() * available.length)];
+            correctAnswer = target.letter;
+            document.getElementById('deaf-emoji').textContent = target.emoji;
+            document.getElementById('deaf-word').textContent = (currentLang === 'tk' ? "Söz: " : "Слово: ") + target.word;
+
+            let choices = [correctAnswer];
+            while(choices.length < 4 && choices.length < available.length) {
+                let r = available[Math.floor(Math.random() * available.length)].letter;
+                if(!choices.includes(r)) choices.push(r);
+            }
+            choices.sort(() => Math.random() - 0.5);
+
+            choices.forEach(ch => {
+                const b = document.createElement('button');
+                b.className = 'quiz-btn';
+                b.style.display = 'flex';
+                b.style.alignItems = 'center';
+                b.style.justifyContent = 'center';
+
+                const im = document.createElement('img');
+                im.src = userPhotos[ch];
+                im.style.width = '55px'; im.style.height = '55px'; im.style.objectFit = 'cover'; im.style.borderRadius = '8px';
+                im.style.transform = `rotate(${photoRotations[ch] || 0}deg)`;
+                b.appendChild(im);
+
+                b.addEventListener('click', () => {
+                    if(isAnswerLocked) return;
+                    isAnswerLocked = true;
+                    if(ch === correctAnswer) { 
+                        b.classList.add('correct'); 
+                        deafScore += 10; 
+                        triggerConfetti();
+                    }
+                    else { b.classList.add('wrong'); opts.querySelectorAll('.quiz-btn').forEach(btn => { if(btn.querySelector('img').src === userPhotos[correctAnswer]) btn.classList.add('correct'); }); }
+                    setTimeout(nextDeafQuestion, 1300);
+                });
+                opts.appendChild(b);
+            });
+        }
+
+        function nextQuiz() {
+            isAnswerLocked = false;
+            const img = document.getElementById('quiz-img');
+            const opts = document.getElementById('quiz-options-box');
+            document.getElementById('quiz-score').textContent = (currentLang === 'tk' ? "Ball: " : "Баллы: ") + quizScore;
+            opts.innerHTML = '';
+
+            const available = alphabet.filter(i => userPhotos[i.letter]);
+            if (available.length < 2) return;
+            const target = available[Math.floor(Math.random() * available.length)];
+            correctAnswer = target.letter;
+            img.src = userPhotos[correctAnswer];
+
+            let choices = [correctAnswer];
+            while(choices.length < 4 && choices.length < available.length) {
+                let r = available[Math.floor(Math.random() * available.length)].letter;
+                if(!choices.includes(r)) choices.push(r);
+            }
+            choices.sort(() => Math.random() - 0.5);
+
+            choices.forEach(ch => {
+                const b = document.createElement('button');
+                b.className = 'quiz-btn';
+                b.textContent = ch;
+                b.addEventListener('click', () => {
+                    if(isAnswerLocked) return;
+                    isAnswerLocked = true;
+                    if(ch === correctAnswer) { 
+                        b.classList.add('correct'); 
+                        quizScore += 10; 
+                        triggerConfetti();
+                    }
+                    else { b.classList.add('wrong'); opts.querySelectorAll('.quiz-btn').forEach(btn => { if(btn.textContent === correctAnswer) btn.classList.add('correct'); }); }
+                    setTimeout(nextQuiz, 1200);
+                });
+                opts.appendChild(b);
+            });
+        }
+
+        document.getElementById('lang-toggle-btn').addEventListener('click', () => {
+            currentLang = currentLang === 'tk' ? 'ru' : 'tk';
+            document.getElementById('main-title').textContent = currentLang === 'tk' ? "Türkmen Daktil Alifbiýi" : "Туркменский дактильный алфавит";
+            document.getElementById('author-text').textContent = currentLang === 'tk' ? "Autor: Ý. Mürzaýew | Terbiýeçi" : "Автор: Мурзаев Юсуп | Воспитатель";
+            searchInput.placeholder = currentLang === 'tk' ? "Harp gözle (Mysal: A, B, Ç)..." : "Поиск буквы (Пример: A, B, Ç)...";
+            infoBtn.textContent = currentLang === 'tk' ? "📖 Barada" : "📖 О проекте";
+            closeInfoBtn.textContent = currentLang === 'tk' ? "Düşnükli / Ýapmak" : "Понятно / Закрыть";
+            document.getElementById('info-modal-title').textContent = currentLang === 'tk' ? "📖 Usuly maglumat we maksat" : "📖 Методическая справка и цель";
+            updateDisplay();
+        });
+
+        document.getElementById('theme-btn').addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+            localStorage.setItem('daltil_theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+        });
+
+        updateDisplay();
+    </script>
+</body>
+</html>
