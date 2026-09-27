@@ -65,10 +65,12 @@
             gap: 15px;
         }
 
+        /* Официальная шапка с гербом и узорами */
         header {
-            background-color: var(--card-bg);
-            padding: 15px;
-            border-radius: 16px;
+            background: linear-gradient(135deg, #1b4d3e 0%, #113328 100%);
+            color: #ffffff;
+            padding: 18px 15px;
+            border-radius: 18px;
             box-shadow: var(--shadow);
             text-align: center;
             border: 2px solid var(--accent);
@@ -76,27 +78,54 @@
             overflow: hidden;
         }
 
-        header::before {
-            content: "";
+        header::before, header::after {
+            content: "▧ ▨ ▧ ▨ ▧";
             position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
+            top: 10px;
+            color: var(--accent);
+            font-size: 10px;
+            opacity: 0.6;
+            letter-spacing: 4px;
+        }
+        header::before { left: 10px; }
+        header::after { right: 10px; }
+
+        .official-emblem-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 8px;
         }
 
-        .state-emblem {
-            font-size: 16px;
+        .state-emblem-icon {
+            font-size: 26px;
+            background: rgba(212, 175, 55, 0.2);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--accent);
+        }
+
+        .ministry-title {
+            font-size: 9px;
             color: var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             margin-bottom: 2px;
-            letter-spacing: 2px;
         }
 
         .school-name {
             font-size: 10px;
-            color: var(--primary);
-            font-weight: 700;
-            margin-bottom: 4px;
+            color: #f7f4ed;
+            font-weight: 600;
+            margin-bottom: 8px;
             line-height: 1.3;
+            opacity: 0.95;
         }
 
         .progress-indicator {
@@ -107,9 +136,11 @@
         }
 
         h1 {
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 800;
             margin-bottom: 4px;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
         .author-info {
@@ -128,14 +159,18 @@
         }
 
         .btn-small {
-            background: var(--ornament-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--accent);
+            color: #ffffff;
             padding: 6px 10px;
             border-radius: 8px;
             font-size: 11px;
             cursor: pointer;
             font-weight: 600;
+        }
+
+        .btn-small:hover {
+            background: rgba(212, 175, 55, 0.2);
         }
 
         .search-box {
@@ -147,17 +182,21 @@
 
         .search-input {
             flex: 1;
-            background: var(--ornament-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid var(--accent);
+            color: #ffffff;
             padding: 8px 12px;
             border-radius: 8px;
             font-size: 13px;
             outline: none;
         }
 
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
         .search-input:focus {
-            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.25);
         }
 
         .nav-tabs {
@@ -438,7 +477,10 @@
 
     <div class="container">
         <header>
-            <div class="state-emblem">☪ ★</div>
+            <div class="official-emblem-box">
+                <div class="state-emblem-icon">🇹🇲</div>
+            </div>
+            <div class="ministry-title">Türkmenistanyň Bilim ministrligi</div>
             <div class="school-name">Lebap welaýatynyň 5-nji ker, çala eşidýän we soň ker bolan çagalar üçin ýörite umumybilim berýän mekdep-internaty</div>
             <div class="progress-indicator" id="progress-indicator">Ýüklenen suratlar: 0 / 30</div>
             <h1 id="main-title">Türkmen Daktil Alifbiýi</h1>
