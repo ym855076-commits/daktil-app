@@ -5,25 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Türkmen Daktil Alifbiýi Pro</title>
     
-    <!-- Полные настройки PWA и иконок для установки -->
     <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#FF5E62">
+    <meta name="theme-color" content="#1b4d3e">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Daktil">
     <link rel="icon" type="image/svg+xml" href="./icon.svg">
     <link rel="apple-touch-icon" href="./icon.svg">
 
-    <!-- Подключаем библиотеку конфетти для анимации успехов -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --bg-color: #f7f4ed;
             --card-bg: #ffffff;
             --text-color: #2c221e;
-            --primary: #993d3d;
+            --primary: #1b4d3e;
             --accent: #d4af37;
-            --shadow: 0 10px 25px -5px rgba(153, 61, 61, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --shadow: 0 10px 25px -5px rgba(27, 77, 62, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
             --border-color: #e6dfd5;
             --ornament-bg: #fdfbf7;
             --success-color: #2e7d32;
@@ -34,7 +32,7 @@
             --card-bg: #2a211e;
             --text-color: #f7f4ed;
             --primary: #d4af37;
-            --accent: #993d3d;
+            --accent: #1b4d3e;
             --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
             --border-color: #3d312c;
             --ornament-bg: #221a17;
@@ -82,8 +80,15 @@
             content: "";
             position: absolute;
             top: 0; left: 0; right: 0;
-            height: 4px;
+            height: 5px;
             background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
+        }
+
+        .state-emblem {
+            font-size: 16px;
+            color: var(--accent);
+            margin-bottom: 2px;
+            letter-spacing: 2px;
         }
 
         .school-name {
@@ -393,16 +398,24 @@
             opacity: 0.9;
         }
 
+        .modal-camera {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
         .modal-camera video {
             width: 100%;
             max-width: 400px;
-            height: 380px;
+            height: 350px;
             object-fit: cover;
             border-radius: 16px;
             border: 3px solid var(--accent);
+            background: #000;
         }
 
-        /* Стиль для интерактивного увеличения QR-кода */
         #qr-code-img {
             width: 100px;
             height: 100px;
@@ -425,6 +438,7 @@
 
     <div class="container">
         <header>
+            <div class="state-emblem">☪ ★</div>
             <div class="school-name">Lebap welaýatynyň 5-nji ker, çala eşidýän we soň ker bolan çagalar üçin ýörite umumybilim berýän mekdep-internaty</div>
             <div class="progress-indicator" id="progress-indicator">Ýüklenen suratlar: 0 / 30</div>
             <h1 id="main-title">Türkmen Daktil Alifbiýi</h1>
@@ -480,7 +494,7 @@
             </div>
         </div>
 
-        <!-- Сетка и резервное копирование -->
+        <!-- Сетка и бэкап -->
         <div id="section-grid" class="card hidden">
             <div style="width: 100%; display: flex; justify-content: space-between; margin-bottom: 10px; gap: 8px;">
                 <button class="btn-small" id="export-btn" style="background: var(--primary); color:white; flex:1;">💾 Ätiýaçlyk göçürmek</button>
@@ -536,7 +550,7 @@
         </div>
     </div>
 
-    <!-- Модальное окно: Методическая справка с увеличивающимся QR-кодом -->
+    <!-- Модальное окно: Методическая справка -->
     <div class="modal-overlay hidden" id="info-modal">
         <div class="modal-content">
             <h3 id="info-modal-title">📖 Usuly maglumat we maksat</h3>
@@ -544,10 +558,9 @@
             <p id="info-p2"><b>Pedagogik ähmiýeti:</b> Daktilologiýa çagalaryň sözlük zapasyny baýlaşdirmaga, el hereketleriniň utgaşyklygyny ösdürmäge we türkmen dili düşüngelerini giňeltmäge ýardam edýär.</p>
             <p id="info-p3"><b>Bellik:</b> Ähli maglumatlar we suratlar ýerli enjamda ýygnalyp, islendik wagt täzelemek ýa-da göçürmek mümkinçiligi bar.</p>
             
-            <!-- Интерактивный QR-код для коллег (увеличивается по клику) -->
             <div style="margin-top: 15px; padding: 12px; background: var(--ornament-bg); border-radius: 12px; border: 1px solid var(--border-color); text-align: center;">
                 <p style="font-size: 11px; font-weight: 700; color: var(--primary); margin-bottom: 6px;">Terbiýeçiler üçin QR-kod (Ulaltmak üçin basyň):</p>
-                <img src="./qrcode.png" alt="QR Code" id="qr-code-img">
+                <img src="qrcode.png" alt="QR Code" id="qr-code-img" onerror="this.onerror=null; this.src='./qrcode.png';">
                 <p style="font-size: 9px; opacity: 0.8; margin-top: 4px;">Kamerany yöneldip açyň</p>
             </div>
 
@@ -555,13 +568,16 @@
         </div>
     </div>
 
-    <!-- Модальное окно веб-камеры -->
-    <div class="modal-overlay modal-camera hidden" id="camera-modal">
-        <video id="cam-video" autoplay playsinline muted></video>
-        <canvas id="cam-canvas" class="hidden"></canvas>
-        <div style="display: flex; gap: 10px; width: 100%; max-width: 400px;">
-            <button class="btn-main" id="take-snapshot-btn" style="background: var(--success-color);">📸 Surata düşürmek</button>
-            <button class="btn-main" id="close-cam-btn" style="background: #c62828;">Ýatyrmak</button>
+    <!-- Модальное окно камеры -->
+    <div class="modal-overlay hidden" id="camera-modal">
+        <div class="modal-content modal-camera">
+            <h3 style="color: var(--primary); font-size: 15px;">📸 Daktil surata düşürmek</h3>
+            <video id="cam-video" autoplay playsinline muted></video>
+            <canvas id="cam-canvas" class="hidden"></canvas>
+            <div style="display: flex; gap: 10px; width: 100%;">
+                <button class="btn-main" id="take-snapshot-btn" style="background: var(--success-color);">Surata düşürmek</button>
+                <button class="btn-main" id="close-cam-btn" style="background: #c62828;">Ýatyrmak</button>
+            </div>
         </div>
     </div>
 
@@ -607,7 +623,7 @@
         let correctAnswer = '', isAnswerLocked = false, selectedClassIndex = 1;
         let mediaStream = null;
 
-        if (localStorage.getItem('daktil_theme') === 'dark') document.body.classList.add('dark-theme');
+        if (localStorage.getItem('daltil_theme') === 'dark') document.body.classList.add('dark-theme');
 
         const currentLetterEl = document.getElementById('current-letter');
         const wordText = document.getElementById('word-text');
@@ -641,7 +657,6 @@
         const sectionClasses = document.getElementById('section-classes');
         const sectionDeafGame = document.getElementById('section-deafgame');
 
-        // Обработка клика для увеличения/уменьшения QR-кода
         const qrCodeImg = document.getElementById('qr-code-img');
         qrCodeImg.addEventListener('click', () => {
             qrCodeImg.classList.toggle('expanded');
@@ -729,22 +744,33 @@
         });
 
         openCamBtn.addEventListener('click', async () => {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert(currentLang === 'tk' 
+                    ? "Siziň browseriňiz kamerany goldamaýar ýa-da HTTPS birikmesi däl!" 
+                    : "Ваш браузер не поддерживает камеру или соединение не защищено (нужен HTTPS)!");
+                return;
+            }
+
             try {
                 mediaStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }, 
+                    video: { facingMode: 'environment' }, 
                     audio: false 
                 });
                 camVideo.srcObject = mediaStream;
                 cameraModal.classList.remove('hidden');
             } catch (err) {
+                console.error(err);
                 alert(currentLang === 'tk' 
-                    ? "Kamerany açyp bolmady! Brauzere kamerany ulanmaga rugsat beriň ýa-da 'Galereýa' düwmmesini ulanyň." 
-                    : "Не удалось запустить камеру! Проверьте разрешения браузера или используйте кнопку 'Галерея'.");
+                    ? "Kamerany açyp bolmady! Setting-den rugsat beriň ýa-da 'Galereýa' düwmmesini ulanyň." 
+                    : "Не удалось получить доступ к камере! Проверьте разрешения в браузере или используйте кнопку 'Галерея'.");
             }
         });
 
         document.getElementById('close-cam-btn').addEventListener('click', () => {
-            if (mediaStream) mediaStream.getTracks().forEach(t => t.stop());
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(t => t.stop());
+                mediaStream = null;
+            }
             cameraModal.classList.add('hidden');
         });
 
@@ -761,7 +787,10 @@
             photoRotations[letter] = 0;
             localStorage.setItem('daktil_photos', JSON.stringify(userPhotos));
 
-            if (mediaStream) mediaStream.getTracks().forEach(t => t.stop());
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(t => t.stop());
+                mediaStream = null;
+            }
             cameraModal.classList.add('hidden');
             updateDisplay();
         });
